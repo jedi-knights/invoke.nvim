@@ -1,0 +1,6 @@
+invoke.nvim	invoke.txt	/*invoke.nvim*
+invoke.nvim-config	invoke.txt	/*invoke.nvim-config*
+invoke.nvim-credits	invoke.txt	/*invoke.nvim-credits*
+invoke.nvim-install	invoke.txt	/*invoke.nvim-install*
+invoke.nvim-usage	invoke.txt	/*invoke.nvim-usage*
+invoke.nvim.txt	invoke.txt	/*invoke.nvim.txt*

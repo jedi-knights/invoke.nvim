@@ -1,0 +1,101 @@
+*invoke.nvim.txt*  Plugin to run Python Invoke tasks from Neovim
+
+==============================================================================
+INTRODUCTION                                                *invoke.nvim*
+
+invoke.nvim integrates the Python `invoke` task runner directly into Neovim.
+
+It provides:
+- Fuzzy task selection via Snacks
+- Floating terminal execution via toggleterm.nvim
+- Live docstring preview and aliases
+- Smart plugin activation only when `tasks.py` is found
+- Task history and favorites system
+- Task categorization and filtering
+- Interactive argument input with presets
+- Task execution monitoring and notifications
+- Task statistics and runtime estimation
+- Integration with overseer.nvim, trouble.nvim, and which-key.nvim
+
+==============================================================================
+USAGE                                                       *invoke.nvim-usage*
+
+Use the following command to open the picker:
+
+    :InvokeTasks
+
+Or use the default keymap:
+
+    <leader>ti
+
+Additional commands:
+    :InvokeHistory      - View and rerun recent tasks
+    :InvokeFavorites    - View and run favorite tasks
+    :InvokeByCategory   - Browse tasks by category
+    :InvokeStats        - Show task statistics
+    :InvokeClearHistory - Clear task history
+    :InvokeClearFavorites - Clear favorite tasks
+
+==============================================================================
+CONFIGURATION                                               *invoke.nvim-config*
+
+Invoke setup accepts a Lua table:
+
+>lua
+    require("invoke_nvim").setup({
+      keymap = "<leader>ti", -- Default keymap to open the task picker
+      
+      -- Task execution settings
+      term_direction = "float", -- "float", "horizontal", "vertical"
+      close_on_exit = false, -- Keep terminal open after task completes
+      show_preview = true, -- Show task preview in picker
+      
+      -- Task history and favorites
+      enable_history = true, -- Track recently run tasks
+      max_history = 10, -- Maximum number of recent tasks to remember
+      enable_favorites = true, -- Allow marking tasks as favorites
+      
+      -- Task arguments
+      enable_args = true, -- Enable interactive argument input
+      arg_presets = {}, -- Predefined argument presets for tasks
+      
+      -- Notifications
+      enable_notifications = true, -- Show task completion notifications
+      
+      -- Integration settings
+      overseer_integration = false, -- Integrate with overseer.nvim
+      trouble_integration = false, -- Integrate with trouble.nvim
+      which_key_integration = false, -- Integrate with which-key.nvim
+    })
+
+==============================================================================
+INSTALLATION                                                *invoke.nvim-install*
+
+For Lazy.nvim:
+
+>lua
+    {
+      "yourusername/invoke.nvim",
+      cond = function()
+        return vim.fn.filereadable(vim.fn.getcwd() .. "/tasks.py") == 1
+      end,
+      config = function()
+        require("invoke_nvim").setup()
+      end,
+      dependencies = {
+        "nvim-lua/plenary.nvim",
+        "mtoohey31/snacks.nvim",
+        "akinsho/toggleterm.nvim",
+      },
+      cmd = { "InvokeTasks" },
+      keys = {
+        { "<leader>ti", "<cmd>InvokeTasks<cr>", desc = "Invoke: Open Task Picker" },
+      },
+    }
+
+==============================================================================
+CREDITS & LICENSE                                           *invoke.nvim-credits*
+
+MIT License © 2025 Omar Crosby
+
+vim:tw=78:ts=8:ft=help:norl:
