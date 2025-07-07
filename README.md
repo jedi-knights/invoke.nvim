@@ -30,7 +30,7 @@ With `invoke.nvim`, your `invoke` tasks are just a fuzzy search and `<CR>` away 
 - 💻 Run selected tasks in a floating terminal (via `toggleterm.nvim`)
 - 📘 Live preview with task metadata (name, aliases, docstring)
 - 🛠️ Configurable keymap and entry point
-- 🧠 Smart loading: plugin only activates when `tasks.py` is present at your project root
+- 🧠 Simple and reliable: works with any invoke setup
 - ⭐ Task history and favorites system
 - 🏷️ Task categorization and filtering
 - 📝 Interactive argument input with presets
@@ -44,14 +44,15 @@ With `invoke.nvim`, your `invoke` tasks are just a fuzzy search and `<CR>` away 
 
 ### Using Lazy.nvim
 
-This plugin is lazily loaded only when a `tasks.py` file is present at the project root:
+This plugin can be loaded conditionally or globally:
 
 ```lua
 {
   "yourusername/invoke.nvim",
-  cond = function()
-    return vim.fn.filereadable(vim.fn.getcwd() .. "/tasks.py") == 1
-  end,
+  -- Optional: load only when tasks.py exists
+  -- cond = function()
+  --   return vim.fn.filereadable(vim.fn.getcwd() .. "/tasks.py") == 1
+  -- end,
   config = function()
     require("invoke_nvim").setup()
   end,
@@ -113,6 +114,13 @@ use {
 
 When selecting a task that accepts arguments, you'll be prompted to enter them interactively. You can also configure argument presets in your setup.
 
+### When No Tasks Are Found
+
+If no invoke tasks are found, the plugin will show a simple warning message. This can happen when:
+- No `tasks.py` file exists in the current directory
+- The `invoke` command is not installed
+- There are no tasks defined in the current project
+
 ---
 
 ## 🔧 Configuration
@@ -133,10 +141,12 @@ require("invoke_nvim").setup({
   
   -- Task arguments
   enable_args = true, -- Enable interactive argument input
-  arg_presets = { -- Predefined argument presets for tasks
-    test = { verbose = true },
-    build = { clean = true },
-  },
+  arg_presets = {}, -- Predefined argument presets for tasks
+  -- Example presets:
+  -- arg_presets = {
+  --   test = { verbose = true },
+  --   build = { clean = true },
+  -- },
   
   -- Notifications
   enable_notifications = true, -- Show task completion notifications
@@ -167,6 +177,7 @@ The plugin intelligently detects your environment:
 
 ### Example tasks.py:
 
+
 ```python
 from invoke import task
 
@@ -180,6 +191,8 @@ def run(c):
 ```
 
 Then run `:InvokeTasks` in Neovim and select from `test`, `run`, etc.
+
+**Note**: The plugin will work in any directory, but will only show tasks if `invoke --list` returns results.
 
 ---
 
