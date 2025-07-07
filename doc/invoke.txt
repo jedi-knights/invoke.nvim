@@ -35,6 +35,8 @@ Additional commands:
     :InvokeStats        - Show task statistics
     :InvokeClearHistory - Clear task history
     :InvokeClearFavorites - Clear favorite tasks
+    :InvokeStatus       - Show environment status
+    :InvokeSetup        - Show setup help
 
 ==============================================================================
 CONFIGURATION                                               *invoke.nvim-config*

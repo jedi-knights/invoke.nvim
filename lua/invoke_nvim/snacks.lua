@@ -57,7 +57,12 @@ end
 function M.open()
   local tasks = list.get_tasks()
   if #tasks == 0 then
-    vim.notify("No invoke tasks found.", vim.log.levels.WARN)
+    local detector = require("invoke_nvim.detector")
+    local error_msg = detector.get_error_message()
+    vim.notify(error_msg, vim.log.levels.WARN, { title = "Invoke.nvim" })
+    
+    -- Show setup help if appropriate
+    detector.show_setup_help()
     return
   end
 
@@ -182,7 +187,12 @@ end
 function M.open_by_category()
   local tasks = list.get_tasks()
   if #tasks == 0 then
-    vim.notify("No invoke tasks found.", vim.log.levels.WARN)
+    local detector = require("invoke_nvim.detector")
+    local error_msg = detector.get_error_message()
+    vim.notify(error_msg, vim.log.levels.WARN, { title = "Invoke.nvim" })
+    
+    -- Show setup help if appropriate
+    detector.show_setup_help()
     return
   end
 

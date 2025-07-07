@@ -64,6 +64,28 @@ function M.setup(opts)
     vim.notify("Favorite tasks cleared", vim.log.levels.INFO)
   end, { desc = "Clear Invoke Favorite Tasks" })
 
+  vim.api.nvim_create_user_command("InvokeStatus", function()
+    local detector = require("invoke_nvim.detector")
+    local status = detector.get_environment_status()
+    
+    local message = "Invoke.nvim Environment Status:\n\n"
+    message = message .. "Invoke available: " .. (status.invoke_available and "✓" or "✗") .. "\n"
+    message = message .. "Tasks.py present: " .. (status.tasks_file_present and "✓" or "✗") .. "\n"
+    message = message .. "Python project: " .. (status.python_project and "✓" or "✗") .. "\n"
+    message = message .. "Global tasks: " .. (status.has_global_tasks and "✓" or "✗") .. "\n"
+    
+    if status.invoke_version then
+      message = message .. "Invoke version: " .. status.invoke_version .. "\n"
+    end
+    
+    vim.notify(message, vim.log.levels.INFO, { title = "Invoke.nvim Status" })
+  end, { desc = "Show Invoke Environment Status" })
+
+  vim.api.nvim_create_user_command("InvokeSetup", function()
+    local detector = require("invoke_nvim.detector")
+    detector.show_setup_help()
+  end, { desc = "Show Invoke Setup Help" })
+
   -- Register keymaps
   vim.keymap.set("n", M.options.keymap, function()
     require("invoke_nvim.snacks").open()
