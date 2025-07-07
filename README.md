@@ -106,6 +106,8 @@ use {
 - `:InvokeStats` - Show task statistics
 - `:InvokeClearHistory` - Clear task history
 - `:InvokeClearFavorites` - Clear favorite tasks
+- `:InvokeStatus` - Show environment status
+- `:InvokeSetup` - Show setup help
 
 ### Task Arguments
 
@@ -151,7 +153,19 @@ require("invoke_nvim").setup({
 ## 🧱 Requirements
 
 - Python project with `invoke` installed
-- A `tasks.py` file like:
+- A `tasks.py` file (will be auto-created if missing)
+
+### Smart Detection
+
+The plugin intelligently detects your environment:
+
+- **Invoke not installed**: Shows installation instructions
+- **No tasks.py in Python project**: Offers to create a basic template
+- **No tasks.py in non-Python project**: Suggests navigating to a Python project
+- **Global invoke tasks**: Works with system-wide invoke tasks
+- **Mixed environments**: Gracefully handles various setups
+
+### Example tasks.py:
 
 ```python
 from invoke import task
