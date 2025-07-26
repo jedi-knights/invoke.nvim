@@ -40,6 +40,70 @@ function M.is_python_project()
   return false
 end
 
+-- Check if invoke is a dependency in the project
+function M.is_invoke_dependency()
+  -- Check pyproject.toml for invoke dependency
+  local pyproject_file = vim.fn.getcwd() .. "/pyproject.toml"
+  if vim.fn.filereadable(pyproject_file) == 1 then
+    local file = io.open(pyproject_file, "r")
+    if file then
+      local content = file:read("*a")
+      file:close()
+      if content:match("invoke") then
+        return true
+      end
+    end
+  end
+  
+  -- Check requirements.txt for invoke dependency
+  local requirements_file = vim.fn.getcwd() .. "/requirements.txt"
+  if vim.fn.filereadable(requirements_file) == 1 then
+    local file = io.open(requirements_file, "r")
+    if file then
+      local content = file:read("*a")
+      file:close()
+      if content:match("^invoke") or content:match("^%s*invoke") then
+        return true
+      end
+    end
+  end
+  
+  -- Check setup.py for invoke dependency
+  local setup_file = vim.fn.getcwd() .. "/setup.py"
+  if vim.fn.filereadable(setup_file) == 1 then
+    local file = io.open(setup_file, "r")
+    if file then
+      local content = file:read("*a")
+      file:close()
+      if content:match("invoke") then
+        return true
+      end
+    end
+  end
+  
+  return false
+end
+
+-- Check if the plugin should load (similar to go-task.nvim pattern)
+function M.should_load()
+  -- Check if we're in a headless environment (CI, etc.)
+  if #vim.api.nvim_list_uis() == 0 then
+    return false
+  end
+  
+  -- Check if invoke is available and tasks.py exists
+  if M.is_invoke_available() and M.is_tasks_file_present() then
+    return true
+  end
+  
+  -- Check if invoke is a dependency and tasks.py exists
+  if M.is_invoke_dependency() and M.is_tasks_file_present() then
+    return true
+  end
+  
+  return false
+end
+
 -- Get invoke version
 function M.get_invoke_version()
   local handle = io.popen("invoke --version 2>/dev/null")
@@ -75,6 +139,7 @@ function M.get_environment_status()
     invoke_available = M.is_invoke_available(),
     tasks_file_present = M.is_tasks_file_present(),
     python_project = M.is_python_project(),
+    invoke_dependency = M.is_invoke_dependency(),
     invoke_version = M.get_invoke_version(),
     has_global_tasks = M.has_global_tasks()
   }
