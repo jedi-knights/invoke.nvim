@@ -68,6 +68,28 @@ This plugin can be loaded conditionally or globally:
 }
 ```
 
+### Using native `vim.pack` (Neovim ≥ 0.12)
+
+`vim.pack.add` does not run `setup()` for you — the follow-up call is
+explicit. All three runtime dependencies (`plenary.nvim`, `snacks.nvim`,
+`toggleterm.nvim`) need to be added separately before the plugin:
+
+```lua
+vim.pack.add({
+  { src = "https://github.com/nvim-lua/plenary.nvim" },
+  { src = "https://github.com/folke/snacks.nvim" },
+  { src = "https://github.com/akinsho/toggleterm.nvim" },
+  { src = "https://github.com/jedi-knights/invoke.nvim" },
+})
+
+require("invoke_nvim").setup()
+vim.keymap.set("n", "<leader>ti", "<cmd>InvokeTasks<cr>", { desc = "Invoke: Open Task Picker" })
+```
+
+Pin to a tag or branch with `version = "..."`. `vim.pack.add` is idempotent —
+it clones on first run and does nothing on subsequent runs. Use
+`:lua vim.pack.update()` to pull new commits.
+
 ### Using Packer.nvim
 
 ```lua
